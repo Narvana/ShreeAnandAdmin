@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Models\Product;
 use GuzzleHttp\Handler\Proxy;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -64,19 +66,20 @@ class ProductController extends Controller
         try {
             //code...
             // $params=$request->query('id');
-            $product=Product::get();
+            $product=DB::table('products')
+            ->leftJoin('categories','products.category_id','=','categories.id')
+            ->select(
+                'products.id',
+                'categories.category_name',
+                'products.product_name',
+                'products.product_image',
+                )
+            ->get();
+
             if($product->isEmpty())
             {
                 return response()->json(['success'=>0,'error'=>'No data Found'],404);
             }
-            // if($params){
-            //     $singleProduct = Product::find($params);
-            //     if(!$singleProduct)
-            //     {
-            //         return response()->json(['success'=>0,'error'=>"No data Found, in id {$params}"],404);   
-            //     }
-            //     return response()->json(['success'=>1,'Product'=>$singleProduct],200);
-            // }
             return response()->json(['success'=>1,'Products'=>$product],200);
          } catch (\Throwable $th) {
             //throw $th;
