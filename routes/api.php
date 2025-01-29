@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminRegisterController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 
 /*
@@ -19,6 +20,7 @@ use App\Http\Controllers\ProductController;
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
+// 
 // });
 
 Route::group([ 'middleware'=>'api', 'prefix' => 'auth'], function () {
@@ -28,12 +30,17 @@ Route::group([ 'middleware'=>'api', 'prefix' => 'auth'], function () {
 
 Route::middleware(['auth:sanctum',])->group(function () {
     Route::get('/profile/Admin',[AdminRegisterController::class, 'profileAdmin']);
-
     Route::post('/add/Category',[CategoryController::class,'AddCategory']);
     Route::get('/show/Category',[CategoryController::class,'ShowCategory']);
     Route::delete('/delete/Category',[CategoryController::class,'RemoveCategory']);
-
     Route::post('/add/Product',[ProductController::class,'AddProduct']);
     Route::get('/show/Product',[ProductController::class,'ShowProduct']);
     Route::delete('/delete/Product',[ProductController::class,'RemoveProduct']);
+
+    Route::post('/Add/Order',[OrderController::class,'addOrder']);
+
+    Route::get('/Get/Order',[OrderController::class,'showOrder']);
 });
+
+// string // date
+
